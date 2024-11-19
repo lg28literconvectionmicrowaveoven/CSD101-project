@@ -1,6 +1,6 @@
 // TODO: custom flights and bookings path with cmd arguments
-#include "structs.h"
-#include "utils.h"
+#include "lib/structs.h"
+#include "lib/utils.h"
 #include <stdio.h>
 
 void flightManagement(int *choice, int *numberOfFlights, Flight flights[]) {

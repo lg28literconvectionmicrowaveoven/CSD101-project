@@ -1,6 +1,6 @@
 // TODO: specific seat numbers
 #include "structs.h"
-#include "cJSON/cJSON.h"
+#include "cJSON.h"
 #include "utils.h"
 #include <stdio.h>
 #include <stdlib.h>
