@@ -1,3 +1,4 @@
+// TODO: custom flights and bookings path with cmd arguments
 #include "structs.h"
 #include "utils.h"
 #include <stdio.h>
@@ -50,7 +51,7 @@ int main() {
     int choice;
     while (1) {
         printf("Please select your mode: -\n1. Flight Management\n2. Booking "
-               "Management\n3. Quit\n: ");
+               "Management\n3. Quit\n4. Save and Quit\n: ");
         scanf("%d", &choice);
         if (choice == 1)
             flightManagement(&choice, &numberOfFlights, flights);

@@ -22,5 +22,7 @@ Flight *appendFlight(Flight *array, int size, Flight element);
 Booking *appendBooking(Booking *array, int size, Booking element);
 Flight *readFlights(char *path, int *numberOfFlights);
 Booking *readBookings(char *path, int *numberOfBookings);
+void writeFlights(char *path, Flight flights[], int size);
+void writeBookings(char *path, Booking bookings[], int size);
 
 #endif // STRUCTS_H_

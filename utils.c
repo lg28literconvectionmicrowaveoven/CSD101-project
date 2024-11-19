@@ -32,3 +32,14 @@ char *readFile(char *path) {
     contents[size] = '\0';
     return contents;
 }
+
+void writeFile(char *str, char *path) {
+    FILE *fptr = fopen(path, "w");
+    if (fptr == NULL) {
+        printf("Could not open file %s. Terminating.", path);
+        fclose(fptr);
+        exit(-1);
+    }
+    fwrite(str, 1, sizeof(str) - 1, fptr);
+    fclose(fptr);
+}

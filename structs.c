@@ -41,7 +41,7 @@ Flight *readFlights(char *path, int *numberOfFlights) {
     cJSON *flightsJSON = cJSON_GetObjectItemCaseSensitive(json, "flights");
     *numberOfFlights = cJSON_GetArraySize(flightsJSON);
     Flight *flights = malloc(sizeof(Flight) * (*numberOfFlights));
-    for (int i = 0; i < numberOfFlights; i++) {
+    for (int i = 0; i < *numberOfFlights; i++) {
         cJSON *flightJSON = cJSON_GetArrayItem(flightsJSON, i);
         Flight flight;
         cJSON *nameJSON = cJSON_GetObjectItemCaseSensitive(flightJSON, "name");
@@ -54,10 +54,7 @@ Flight *readFlights(char *path, int *numberOfFlights) {
         cJSON_Delete(nameJSON);
         cJSON *availabilityJSON =
             cJSON_GetObjectItemCaseSensitive(flightJSON, "available");
-        if (cJSON_IsTrue(availabilityJSON) == 0)
-            flight.available = 1;
-        else
-            flight.available = 0;
+        flight.available = !cJSON_IsTrue(availabilityJSON);
         cJSON_Delete(availabilityJSON);
         cJSON *seatsJSON =
             cJSON_GetObjectItemCaseSensitive(flightJSON, "seats");
@@ -123,7 +120,7 @@ Booking *readBookings(char *path, int *numberOfBookings) {
     cJSON *bookingsJSON = cJSON_GetObjectItemCaseSensitive(json, "bookings");
     *numberOfBookings = cJSON_GetArraySize(bookingsJSON);
     Booking *bookings = malloc(sizeof(Booking) * (*numberOfBookings));
-    for (int i = 0; i < numberOfBookings; i++) {
+    for (int i = 0; i < *numberOfBookings; i++) {
         cJSON *bookingJSON = cJSON_GetArrayItem(bookingsJSON, i);
         Booking booking;
         cJSON *passengerNameJSON =
@@ -177,4 +174,56 @@ Booking *readBookings(char *path, int *numberOfBookings) {
     cJSON_Delete(bookingsJSON);
     cJSON_Delete(json);
     return bookings;
+}
+
+void writeFlights(char *path, Flight flights[], int size) {
+    cJSON *json = cJSON_CreateObject();
+    cJSON_AddItemToObject(json, "type", cJSON_CreateString("flights"));
+    cJSON *flightsJSON = cJSON_CreateArray();
+    for (int i = 0; i < size; i++) {
+        cJSON *flightJSON = cJSON_CreateObject();
+        Flight flight = flights[i];
+        cJSON_AddItemToObject(flightJSON, "name",
+                              cJSON_CreateString(flight.name));
+        cJSON_AddItemToObject(flightJSON, "available",
+                              (flight.available) ? cJSON_True : cJSON_False);
+        cJSON_AddItemToObject(flightJSON, "seats",
+                              cJSON_CreateNumber(flight.seats));
+        cJSON_AddItemToObject(flightJSON, "freeSeats",
+                              cJSON_CreateNumber(flight.freeSeats));
+        cJSON_AddItemToObject(flightJSON, "source",
+                              cJSON_CreateString(flight.source));
+        cJSON_AddItemToObject(flightJSON, "destination",
+                              cJSON_CreateString(flight.destination));
+        cJSON_AddItemToArray(flightsJSON, flightJSON);
+        cJSON_Delete(flightJSON);
+    }
+    cJSON_AddItemToObject(json, "flights", flightsJSON);
+    cJSON_Delete(flightsJSON);
+    writeFile(cJSON_Print(json), path);
+}
+
+void writeBookings(char *path, Booking bookings[], int size) {
+    cJSON *json = cJSON_CreateObject();
+    cJSON_AddItemToObject(json, "type", cJSON_CreateString("bookings"));
+    cJSON *bookingsJSON = cJSON_CreateArray();
+    for (int i = 0; i < size; i++) {
+        cJSON *bookingJSON = cJSON_CreateObject();
+        Booking booking = bookings[i];
+        cJSON_AddItemToObject(bookingJSON, "passengerName",
+                              cJSON_CreateString(booking.passengerName));
+        cJSON_AddItemToObject(bookingJSON, "flightId",
+                              cJSON_CreateNumber(booking.flightId));
+        cJSON_AddItemToObject(bookingJSON, "seats",
+                              cJSON_CreateNumber(booking.seats));
+        cJSON_AddItemToObject(bookingJSON, "age",
+                              cJSON_CreateNumber(booking.age));
+        cJSON_AddItemToObject(bookingJSON, "phoneNumber",
+                              cJSON_CreateNumber(booking.phoneNumber));
+        cJSON_AddItemToArray(bookingsJSON, bookingJSON);
+        cJSON_Delete(bookingJSON);
+    }
+    cJSON_AddItemToObject(json, "bookings", bookingsJSON);
+    cJSON_Delete(bookingsJSON);
+    writeFile(cJSON_Print(json), path);
 }
