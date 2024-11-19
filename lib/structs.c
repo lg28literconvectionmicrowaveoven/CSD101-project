@@ -6,24 +6,50 @@
 #include <stdlib.h>
 #include <string.h>
 
-Flight *appendFlight(Flight *array, int size, Flight element) {
-    Flight *newArray = malloc(sizeof(Flight) * (size + 1));
-    for (int i = 0; i < size; i++)
+Flight *appendFlight(Flight *array, int *size, Flight element) {
+    Flight *newArray = malloc(sizeof(Flight) * ++(*size));
+    for (int i = 0; i < *size; i++)
         newArray[i] = array[i];
-    newArray[size] = element;
+    newArray[*size] = element;
     return newArray;
 }
 
-Booking *appendBooking(Booking *array, int size, Booking element) {
-    Booking *newArray = malloc(sizeof(Booking) * (size + 1));
-    for (int i = 0; i < size; i++)
+Flight *deleteFlight(Flight *array, int *size, int index) {
+    Flight *newArray = malloc(sizeof(Flight) * --(*size));
+    int i = 0;
+    for (; i < index; i++)
         newArray[i] = array[i];
-    newArray[size] = element;
+    i++;
+    for (; i < *size; i++)
+        newArray[i] = array[i];
+    return newArray;
+}
+
+Booking *appendBooking(Booking *array, int *size, Booking element) {
+    Booking *newArray = malloc(sizeof(Booking) * ++(*size));
+    for (int i = 0; i < *size; i++)
+        newArray[i] = array[i];
+    newArray[*size] = element;
+    return newArray;
+}
+
+Booking *deleteBooking(Booking *array, int *size, int index) {
+    Booking *newArray = malloc(sizeof(Flight) * --(*size));
+    int i = 0;
+    for (; i < index; i++)
+        newArray[i] = array[i];
+    i++;
+    for (; i < *size; i++)
+        newArray[i] = array[i];
     return newArray;
 }
 
 Flight *readFlights(char *path, int *numberOfFlights) {
     const char *contents = readFile(path);
+    if (contents == NULL) {
+        Flight *flights;
+        return flights;
+    }
     cJSON *json = cJSON_Parse(contents);
     if (json == NULL) {
         const char *errorPtr = cJSON_GetErrorPtr();
@@ -103,6 +129,10 @@ Flight *readFlights(char *path, int *numberOfFlights) {
 
 Booking *readBookings(char *path, int *numberOfBookings) {
     const char *contents = readFile(path);
+    if (contents == NULL) {
+        Booking *bookings;
+        return bookings;
+    }
     cJSON *json = cJSON_Parse(contents);
     if (json == NULL) {
         const char *errorPtr = cJSON_GetErrorPtr();
