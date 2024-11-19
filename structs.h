@@ -1,7 +1,7 @@
-#ifndef STRUCTS_H
-#define STRUCTS_H
+#ifndef STRUCTS_H_
+#define STRUCTS_H_
 
-typedef struct Booking {
+typedef struct {
     char passengerName[50];
     int flightId;
     int seats;
@@ -9,15 +9,18 @@ typedef struct Booking {
     int phoneNumber;
 } Booking;
 
-typedef struct Flight {
-    int id;
-    short int available;
+typedef struct {
+    int available;
     char name[20];
     int seats;
     int freeSeats;
     char source[3];
     char destination[3];
-    Booking *bookings;
 } Flight;
 
-#endif
+Flight *appendFlight(Flight *array, int size, Flight element);
+Booking *appendBooking(Booking *array, int size, Booking element);
+Flight *readFlights(char *path, int *numberOfFlights);
+Booking *readBookings(char *path, int *numberOfBookings);
+
+#endif // STRUCTS_H_

@@ -7,3 +7,28 @@ int exists(char *path) {
     else
         return 0;
 }
+
+void input(char *buf, char *prompt, int num) {
+    if (!strchr(buf, '\n'))
+        while (getchar() != '\n')
+            ;
+    printf("%s", prompt);
+    fgets(buf, num + 1, stdin);
+}
+
+char *readFile(char *path) {
+    FILE *fptr = fopen(path, "r");
+    if (fptr == NULL) {
+        printf("Could not open file %s. Terminating.", path);
+        fclose(fptr);
+        exit(-1);
+    }
+    fseek(fptr, 0L, SEEK_END);
+    long int size = ftell(fptr);
+    fseek(fptr, 0L, SEEK_SET);
+    char *contents = malloc(size + 1);
+    fread(contents, 1, size, fptr);
+    fclose(fptr);
+    contents[size] = '\0';
+    return contents;
+}

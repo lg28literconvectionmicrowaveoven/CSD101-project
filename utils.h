@@ -3,3 +3,5 @@
 #endif
 
 int exists(char *);
+void input(char *buf, char *prompt, int num);
+char *readFile(char *path);
