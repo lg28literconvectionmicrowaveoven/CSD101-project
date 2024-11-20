@@ -13,9 +13,10 @@ int main() {
     system("clear");
     printf("Welcome to the Flight Reservation System (FRS).\n");
     int choice;
-    printf("Please select your mode: -\n1. Flight Management\n2. Booking "
-           "Management\n3. Quit\n: ");
     while (1) {
+        system("clear");
+        printf("Please select your mode: -\n1. Flight Management\n2. Booking "
+               "Management\n3. Quit\n4. Save and Quit\n: ");
         scanf("%d", &choice);
         if (choice == 1) {
             system("clear");
@@ -354,9 +355,6 @@ int main() {
             printf("Invalid input. Please enter valid input.\n\n");
             break;
         }
-        system("clear");
-        printf("Please select your mode: -\n1. Flight Management\n2. Booking "
-               "Management\n3. Quit\n4. Save and Quit\n: ");
     }
     printf("Quitting...");
     return 0;

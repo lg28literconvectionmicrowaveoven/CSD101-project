@@ -11,6 +11,7 @@ Flight *appendFlight(Flight *array, int *size, Flight element) {
     for (int i = 0; i < *size; i++)
         newArray[i] = array[i];
     newArray[*size] = element;
+    free(array);
     return newArray;
 }
 
@@ -22,6 +23,7 @@ Flight *deleteFlight(Flight *array, int *size, int index) {
     i++;
     for (; i < *size; i++)
         newArray[i] = array[i];
+    free(array);
     return newArray;
 }
 
@@ -30,6 +32,7 @@ Booking *appendBooking(Booking *array, int *size, Booking element) {
     for (int i = 0; i < *size; i++)
         newArray[i] = array[i];
     newArray[*size] = element;
+    free(array);
     return newArray;
 }
 
@@ -41,6 +44,7 @@ Booking *deleteBooking(Booking *array, int *size, int index) {
     i++;
     for (; i < *size; i++)
         newArray[i] = array[i];
+    free(array);
     return newArray;
 }
 
@@ -231,6 +235,8 @@ void writeFlights(char *path, Flight flights[], int size) {
     cJSON_AddItemToObject(json, "flights", flightsJSON);
     cJSON_Delete(flightsJSON);
     writeFile(cJSON_Print(json), path);
+    cJSON_Delete(json);
+    free(flights);
 }
 
 void writeBookings(char *path, Booking bookings[], int size) {
@@ -256,4 +262,6 @@ void writeBookings(char *path, Booking bookings[], int size) {
     cJSON_AddItemToObject(json, "bookings", bookingsJSON);
     cJSON_Delete(bookingsJSON);
     writeFile(cJSON_Print(json), path);
+    cJSON_Delete(json);
+    free(bookings);
 }
