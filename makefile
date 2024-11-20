@@ -1,10 +1,9 @@
 CC: gcc
 CFLAGS: -o
-SRC: main.c ./lib/structs.c ./lib/utils.c ./cJSON/cJSON.c
 all: build
 build:
-	$(CC) $(CFLAGS) $(SRC) -o main
+	$(CC) $(CFLAGS) main.c ./lib/structs.c ./lib/utils.c ./cJSON/cJSON.c -o main
 run:
-	$(CC) $(CFLAGS) $(SRC )-o main; ./main; rm main
+	$(CC) $(CFLAGS) main.c ./lib/structs.c ./lib/utils.c ./cJSON/cJSON.c -o main; ./main; rm main
 clean:
 	rm main
