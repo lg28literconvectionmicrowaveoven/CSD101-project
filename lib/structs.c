@@ -220,7 +220,8 @@ void writeFlights(char *path, Flight flights[], int size) {
         cJSON_AddItemToObject(flightJSON, "name",
                               cJSON_CreateString(flight.name));
         cJSON_AddItemToObject(flightJSON, "available",
-                              (flight.available) ? cJSON_True : cJSON_False);
+                              (flight.available) ? cJSON_CreateTrue()
+                                                 : cJSON_CreateFalse());
         cJSON_AddItemToObject(flightJSON, "seats",
                               cJSON_CreateNumber(flight.seats));
         cJSON_AddItemToObject(flightJSON, "freeSeats",

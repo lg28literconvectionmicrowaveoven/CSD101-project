@@ -18,6 +18,7 @@ int main() {
         printf("Please select your mode: -\n1. Flight Management\n2. Booking "
                "Management\n3. Quit\n4. Save and Quit\n: ");
         scanf("%d", &choice);
+        int id;
         if (choice == 1) {
             system("clear");
             printf(
@@ -50,7 +51,6 @@ int main() {
                 break;
             case 2:
                 system("clear");
-                int id;
                 printf("Enter flight ID: ");
                 scanf("%d", &id);
                 if (id < 0) {
@@ -86,7 +86,6 @@ int main() {
                 break;
             case 3:
                 system("clear");
-                int id;
                 printf("Enter flight ID: ");
                 scanf("%d", &id);
                 if (id < 0) {
@@ -206,6 +205,7 @@ int main() {
                    "existing booking (by booking ID)\n: ");
             scanf("%d", &choice);
             Flight buffer;
+            int id;
             switch (choice) {
             case 1:
                 system("clear");
@@ -244,7 +244,6 @@ int main() {
                 break;
             case 2:
                 system("clear");
-                int id;
                 printf("Enter the booking ID for the booking you'd like to "
                        "delete: ");
                 scanf("%d", &id);
@@ -277,7 +276,6 @@ int main() {
                 break;
             case 3:
                 system("clear");
-                int id;
                 printf("Enter booking ID: ");
                 scanf("%d", &id);
                 if (id < 0) {
