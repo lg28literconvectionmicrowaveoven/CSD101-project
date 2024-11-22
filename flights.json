@@ -1,3 +1,11 @@
 {
-	"type":	"flights"
+	"type":	"flights",
+	"flights":	[{
+			"name":	"thing",
+			"available":	true,
+			"seats":	24,
+			"freeSeats":	24,
+			"source":	"maadel",
+			"destination":	"del"
+		}]
 }

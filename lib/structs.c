@@ -6,67 +6,76 @@
 #include <stdlib.h>
 #include <string.h>
 
-Flight *appendFlight(Flight *array, int *size, Flight element) {
+void appendFlight(Flight **array, int *size, Flight element) {
     if (array == NULL) {
-        Flight *newArray = malloc(sizeof(Flight));
+        *array = malloc(sizeof(Flight));
         *size = 1;
-        newArray[0] = element;
-        return newArray;
+        (*array)[0] = element;
+        return;
     }
     Flight *newArray = malloc(sizeof(Flight) * (*size + 1));
-    for (int i = 0; i < *size; i++)
-        newArray[i] = array[i];
+    memcpy(newArray, *array, sizeof(Flight) * (*size));
     newArray[*size] = element;
     (*size)++;
-    free(array);
-    return newArray;
+    free(*array);
+    *array = newArray;
 }
 
-Flight *deleteFlight(Flight *array, int *size, int index) {
-    if (array == NULL || *size == 1) {
+void deleteFlight(Flight **array, int *size, int index) {
+    if (*array == NULL || *size <= 0) {
         *size = 0;
-        return NULL;
+        return;
     }
-    Flight *newArray = malloc(sizeof(Flight) * --(*size));
-    int i = 0;
-    for (; i < index; i++)
-        newArray[i] = array[i];
-    i++;
-    for (; i < *size; i++)
-        newArray[i] = array[i];
+    if (*size == 1) {
+        free(*array);
+        *size = 0;
+        *array = NULL;
+        return;
+    }
+    Flight *newArray = malloc(sizeof(Flight) * (*size - 1));
+    if (index > 0)
+        memcpy(newArray, *array, sizeof(Flight) * index);
+    if (index < *size - 1)
+        memcpy(newArray + index, *array + index + 1,
+               sizeof(Flight) * (*size - index - 1));
+    (*size)--;
     free(array);
-    return newArray;
+    *array = newArray;
 }
 
-Booking *appendBooking(Booking *array, int *size, Booking element) {
+void appendBooking(Booking **array, int *size, Booking element) {
     if (array == NULL) {
-        Booking *newArray = malloc(sizeof(Booking));
+        *array = malloc(sizeof(Booking));
         *size = 1;
-        newArray[0] = element;
-        return newArray;
+        (*array)[0] = element;
+        return;
     }
     Booking *newArray = malloc(sizeof(Booking) * ++(*size));
-    for (int i = 0; i < *size; i++)
-        newArray[i] = array[i];
+    memcpy(newArray, *array, sizeof(Booking) * (*size));
     newArray[*size] = element;
     free(array);
-    return newArray;
 }
 
-Booking *deleteBooking(Booking *array, int *size, int index) {
-    if (array == NULL || *size == 1) {
+void deleteBooking(Booking **array, int *size, int index) {
+    if (*array == NULL || *size <= 0) {
         *size = 0;
-        return NULL;
+        return;
     }
-    Booking *newArray = malloc(sizeof(Booking) * --(*size));
-    int i = 0;
-    for (; i < index; i++)
-        newArray[i] = array[i];
-    i++;
-    for (; i < *size; i++)
-        newArray[i] = array[i];
-    free(array);
-    return newArray;
+    if (*size == 1) {
+        free(*array);
+        *size = 0;
+        array = NULL;
+        return;
+    }
+    Booking *newArray = malloc(sizeof(Booking) * (*size - 1));
+    if (index > 0)
+        memcpy(newArray, *array, sizeof(Booking) * index);
+    if (index < *size - 1)
+        memcpy(newArray + index, *array + index + 1,
+               sizeof(Booking) * (*size - index - 1));
+    (*size)--;
+    free(*array);
+    *array = newArray;
 }
 
 Flight *readFlights(char *path, int *numberOfFlights) {
@@ -77,6 +86,7 @@ Flight *readFlights(char *path, int *numberOfFlights) {
         return NULL;
     }
     cJSON *json = cJSON_Parse(contents);
+    free((void *)contents);
     if (json == NULL) {
         const char *errorPtr = cJSON_GetErrorPtr();
         printf("JSON has been tampered with.\n");
@@ -85,7 +95,7 @@ Flight *readFlights(char *path, int *numberOfFlights) {
         exit(-1);
     }
     cJSON *type = cJSON_GetObjectItemCaseSensitive(json, "type");
-    if (strcmp(type->valuestring, "flights")) {
+    if (strcmp(type->valuestring, "flights") != 0) {
         printf("JSON has been tampered with.\n");
         exit(-1);
     }
@@ -104,8 +114,7 @@ Flight *readFlights(char *path, int *numberOfFlights) {
         }
         cJSON *availabilityJSON =
             cJSON_GetObjectItemCaseSensitive(flightJSON, "available");
-        flight.available = !cJSON_IsTrue(availabilityJSON);
-        cJSON_Delete(availabilityJSON);
+        flight.available = cJSON_IsTrue(availabilityJSON);
         cJSON *seatsJSON =
             cJSON_GetObjectItemCaseSensitive(flightJSON, "seats");
         if (cJSON_IsNumber(seatsJSON))
@@ -153,6 +162,7 @@ Booking *readBookings(char *path, int *numberOfBookings) {
         return NULL;
     }
     cJSON *json = cJSON_Parse(contents);
+    free((void *)contents);
     if (json == NULL) {
         const char *errorPtr = cJSON_GetErrorPtr();
         printf("JSON has been tampered with.\n");
@@ -161,7 +171,7 @@ Booking *readBookings(char *path, int *numberOfBookings) {
         exit(-1);
     }
     cJSON *type = cJSON_GetObjectItemCaseSensitive(json, "type");
-    if (strcmp(type->valuestring, "bookings")) {
+    if (strcmp(type->valuestring, "bookings") != 0) {
         printf("JSON has been tampered with.\n");
         exit(-1);
     }
@@ -219,10 +229,7 @@ Booking *readBookings(char *path, int *numberOfBookings) {
 
 void writeFlights(char *path, Flight flights[], int size) {
     if (flights == NULL) {
-        cJSON *json = cJSON_CreateObject();
-        cJSON_AddItemToObject(json, "type", cJSON_CreateString("flights"));
-        writeFile(cJSON_Print(json), path);
-        cJSON_Delete(json);
+        writeFile("{\n\t\"type\": \"flights\"\n}", path);
         return;
     }
     cJSON *json = cJSON_CreateObject();
@@ -247,16 +254,15 @@ void writeFlights(char *path, Flight flights[], int size) {
         cJSON_AddItemToArray(flightsJSON, flightJSON);
     }
     cJSON_AddItemToObject(json, "flights", flightsJSON);
-    writeFile(cJSON_Print(json), path);
+    char *out = cJSON_Print(json);
+    writeFile(out, path);
+    free(out);
     cJSON_Delete(json);
 }
 
 void writeBookings(char *path, Booking bookings[], int size) {
     if (bookings == NULL) {
-        cJSON *json = cJSON_CreateObject();
-        cJSON_AddItemToObject(json, "type", cJSON_CreateString("bookings"));
-        writeFile(cJSON_Print(json), path);
-        cJSON_Delete(json);
+        writeFile("{\n\t\"type\": \"bookings\"\n}", path);
         return;
     }
     cJSON *json = cJSON_CreateObject();
@@ -278,6 +284,8 @@ void writeBookings(char *path, Booking bookings[], int size) {
         cJSON_AddItemToArray(bookingsJSON, bookingJSON);
     }
     cJSON_AddItemToObject(json, "bookings", bookingsJSON);
-    writeFile(cJSON_Print(json), path);
+    char *out = cJSON_Print(json);
+    writeFile(out, path);
+    free(out);
     cJSON_Delete(json);
 }

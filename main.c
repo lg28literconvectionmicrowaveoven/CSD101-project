@@ -16,7 +16,7 @@ int main() {
     while (1) {
         printf(
             "Please select your mode: -\n\t1. Flight Management\n\t2. Booking "
-            "Management\n\t3. Quit\n\t4. Save and Quit\n\t: ");
+            "Management\n\t3. Quit\n\t4. Save and Quit\n: ");
         scanf("%d", &choice);
         int id;
         if (choice == 1) {
@@ -44,7 +44,7 @@ int main() {
                 scanf(" %[^\n]s", buffer.source);
                 printf("Enter flight destination (3 characters): ");
                 scanf(" %[^\n]s", buffer.destination);
-                appendFlight(flights, &numberOfFlights, buffer);
+                appendFlight(&flights, &numberOfFlights, buffer);
                 printf("Your flight ID is: %d\n", numberOfFlights);
                 break;
             case 2:
@@ -68,10 +68,10 @@ int main() {
                        "all bookings on the flight)? (0 or 1): ");
                 scanf("%d", &choice);
                 if (choice) {
-                    deleteFlight(flights, &numberOfFlights, id);
+                    deleteFlight(&flights, &numberOfFlights, id);
                     for (int i = 0; i < numberOfBookings; i++) {
                         if (bookings[i].flightId == id) {
-                            deleteBooking(bookings, &numberOfBookings, i);
+                            deleteBooking(&bookings, &numberOfBookings, i);
                             i--;
                         }
                     }
@@ -223,7 +223,7 @@ int main() {
                 scanf("%d", &buffer.age);
                 printf("Enter your phone number (must strictly be a number): ");
                 scanf("%d", &buffer.phoneNumber);
-                appendBooking(bookings, &numberOfBookings, buffer);
+                appendBooking(&bookings, &numberOfBookings, buffer);
                 printf("Your booking ID is: %d\n", numberOfBookings);
                 break;
             case 2:
@@ -250,7 +250,7 @@ int main() {
                     "Are you sure you want to delete this booking? (0 or 1): ");
                 scanf("%d", &choice);
                 if (choice) {
-                    deleteBooking(bookings, &numberOfBookings, id);
+                    deleteBooking(&bookings, &numberOfBookings, id);
                     printf("Booking deleted.\n");
                 } else if (choice != 0)
                     printf("Invalid input.\n");
@@ -327,7 +327,7 @@ int main() {
         } else
             printf("Invalid input. Please enter valid input.\n\n");
     }
-    printf("Quitting...");
+    printf("Quitting...\n");
     free(flights);
     free(bookings);
     return 0;

@@ -18,10 +18,10 @@ typedef struct {
     char destination[3];
 } Flight;
 
-Flight *appendFlight(Flight *array, int *size, Flight element);
-Flight *deleteFlight(Flight *array, int *size, int index);
-Booking *appendBooking(Booking *array, int *size, Booking element);
-Booking *deleteBooking(Booking *array, int *size, int index);
+void appendFlight(Flight **array, int *size, Flight element);
+void deleteFlight(Flight **array, int *size, int index);
+void appendBooking(Booking **array, int *size, Booking element);
+void deleteBooking(Booking **array, int *size, int index);
 
 Flight *readFlights(char *path, int *numberOfFlights);
 Booking *readBookings(char *path, int *numberOfBookings);
