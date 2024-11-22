@@ -4,8 +4,8 @@
 			"name":	"thing",
 			"available":	true,
 			"seats":	24,
-			"freeSeats":	24,
-			"source":	"maadel",
+			"freeSeats":	22,
+			"source":	"maa",
 			"destination":	"del"
 		}]
 }

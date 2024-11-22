@@ -1,4 +1,3 @@
-// TODO: specific seat numbers
 #include "structs.h"
 #include "cJSON.h"
 #include "utils.h"
@@ -39,7 +38,7 @@ void deleteFlight(Flight **array, int *size, int index) {
         memcpy(newArray + index, *array + index + 1,
                sizeof(Flight) * (*size - index - 1));
     (*size)--;
-    free(array);
+    free(*array);
     *array = newArray;
 }
 
@@ -50,10 +49,12 @@ void appendBooking(Booking **array, int *size, Booking element) {
         (*array)[0] = element;
         return;
     }
-    Booking *newArray = malloc(sizeof(Booking) * ++(*size));
+    Booking *newArray = malloc(sizeof(Booking) * (*size + 1));
     memcpy(newArray, *array, sizeof(Booking) * (*size));
     newArray[*size] = element;
-    free(array);
+    (*size)++;
+    free(*array);
+    *array = newArray;
 }
 
 void deleteBooking(Booking **array, int *size, int index) {

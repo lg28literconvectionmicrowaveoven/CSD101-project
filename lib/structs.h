@@ -2,7 +2,7 @@
 #define STRUCTS_H_
 
 typedef struct {
-    char passengerName[50];
+    char passengerName[51];
     int flightId;
     int seats;
     int age;
@@ -11,11 +11,11 @@ typedef struct {
 
 typedef struct {
     int available;
-    char name[20];
+    char name[51];
     int seats;
     int freeSeats;
-    char source[3];
-    char destination[3];
+    char source[4];
+    char destination[4];
 } Flight;
 
 void appendFlight(Flight **array, int *size, Flight element);

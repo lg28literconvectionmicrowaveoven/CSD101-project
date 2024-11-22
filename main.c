@@ -1,4 +1,3 @@
-// TODO: fix press enter to continue
 #include "lib/structs.h"
 #include "lib/utils.h"
 #include <stdio.h>
@@ -16,18 +15,19 @@ int main() {
     while (1) {
         printf(
             "Please select your mode: -\n\t1. Flight Management\n\t2. Booking "
-            "Management\n\t3. Quit\n\t4. Save and Quit\n: ");
+            "Management\n\t3. Save\n\t4. Save and Quit\n\t5. Quit without "
+            "Saving\n: ");
         scanf("%d", &choice);
         int id;
         if (choice == 1) {
             printf(
-                "Please select an operation: -\n\t1. Create a new flight "
+                "\nPlease select an operation: -\n\t1. Create a new flight "
                 "entry\n\t2. "
-                "Delete an existing flight entry (by flight ID).\n\t3. Modify "
+                "Delete an existing flight entry (by flight ID)\n\t3. Modify "
                 "an "
                 "existing flight entry (by flight ID)\n\t4. List all bookings "
                 "under a flight (by flight ID)\n\t5. List all flight "
-                "entries\n: ");
+                "entries\n\t6. Return to main menu\n: ");
             scanf("%d", &choice);
             Flight buffer;
             switch (choice) {
@@ -35,7 +35,7 @@ int main() {
                 printf(
                     "Enter your flight's availability for booking (0 or 1): ");
                 scanf("%d", &buffer.available);
-                printf("Enter your flight's name (20 characters or under): ");
+                printf("Enter your flight's name (50 characters or under): ");
                 scanf(" %[^\n]s", buffer.name);
                 printf("Enter number of seats: ");
                 scanf("%d", &buffer.seats);
@@ -45,7 +45,7 @@ int main() {
                 printf("Enter flight destination (3 characters): ");
                 scanf(" %[^\n]s", buffer.destination);
                 appendFlight(&flights, &numberOfFlights, buffer);
-                printf("Your flight ID is: %d\n", numberOfFlights);
+                printf("Your flight ID is: %d\n\n", numberOfFlights - 1);
                 break;
             case 2:
                 printf("Enter flight ID: ");
@@ -80,7 +80,7 @@ int main() {
                     printf("Invalid input.\n");
                 break;
             case 3:
-                printf("Enter flight ID: ");
+                printf("\nEnter flight ID: ");
                 scanf("%d", &id);
                 if (id < 0) {
                     printf("Invalid flight ID.\n");
@@ -90,21 +90,23 @@ int main() {
                     printf("Could not find flight with flight ID %d.", id);
                     break;
                 }
-                printf("Flight availability: %s\nFlight name: %s\nTotal Seats: "
-                       "%d\nFree seats: %d\nSource: %s\nDestination: %s\n",
-                       (flights[id].available) ? "Yes" : "No", flights[id].name,
-                       flights[id].seats, flights[id].freeSeats,
-                       flights[id].source, flights[id].destination);
+                printf(
+                    "\nFlight availability: %s\nFlight name: %s\nTotal Seats: "
+                    "%d\nFree seats: %d\nSource: %s\nDestination: %s\n",
+                    (flights[id].available) ? "Yes" : "No", flights[id].name,
+                    flights[id].seats, flights[id].freeSeats,
+                    flights[id].source, flights[id].destination);
                 printf("Do you wish to change everything or modify individual "
                        "fields? "
                        "(0 or 1): ");
                 scanf("%d", &choice);
                 if (!choice) {
-                    printf("Enter your flight's availability for booking (0 or "
-                           "1): ");
+                    printf(
+                        "\nEnter your flight's availability for booking (0 or "
+                        "1): ");
                     scanf("%d", &flights[id].available);
                     printf(
-                        "Enter your flight's name (20 characters or under): ");
+                        "Enter your flight's name (50 characters or under): ");
                     scanf(" %[^\n]s", flights[id].name);
                     printf("Enter number of seats: ");
                     scanf("%d", &flights[id].seats);
@@ -115,10 +117,11 @@ int main() {
                     printf("Enter flight destination (3 characters): ");
                     scanf(" %[^\n]s", flights[id].destination);
                 } else if (choice == 1) {
-                    printf("Which parameter would you like to change?");
+                    printf("\nWhich parameter would you like to change?");
                     printf(
-                        "1. Flight availability\n2. Flight name\n3. Total Seats"
-                        "\n4.Free seats\n5. Source\n6. Destination\n: ");
+                        "\n\t1. Flight availability\n\t2. Flight name\n\t3. "
+                        "Total Seats"
+                        "\n\t4. Free seats\n\t5. Source\n\t6. Destination\n: ");
                     scanf("%d", &choice);
                     switch (choice) {
                     case 1:
@@ -127,7 +130,7 @@ int main() {
                         scanf("%d", &(flights[id].available));
                         break;
                     case 2:
-                        printf("Enter your flight's name (20 characters or "
+                        printf("Enter your flight's name (50 characters or "
                                "under): ");
                         scanf(" %[^\n]s", flights[id].name);
                         break;
@@ -158,27 +161,38 @@ int main() {
             case 4:
                 printf("Enter flight ID: ");
                 scanf("%d", &choice);
+                printf("\n");
+                int n = 0;
                 for (int i = 0; i < numberOfBookings; i++)
-                    if (bookings[i].flightId == choice)
-                        printf(
-                            "Flight availability: %s\nFlight name: %s\nTotal "
-                            "Seats: "
-                            "%d\nFree seats: %d\nSource: %s\nDestination: "
-                            "%s\n\n",
-                            (flights[i].available) ? "Yes" : "No",
-                            flights[i].name, flights[i].seats,
-                            flights[i].freeSeats, flights[i].source,
-                            flights[i].destination);
+                    if (bookings[i].flightId == choice) {
+                        printf("Passenger Name: %s\nFlight ID: %d\nNumber of "
+                               "Seats: "
+                               "%d\nAge: %d\nPhone Number: %d\nSource: "
+                               "%s\nDestination: %s\n",
+                               bookings[i].passengerName, bookings[i].flightId,
+                               bookings[i].seats, bookings[i].age,
+                               bookings[i].phoneNumber,
+                               flights[bookings[i].flightId].source,
+                               flights[bookings[i].flightId].destination);
+                        n++;
+                    }
+                if (n == 0)
+                    printf("We could not find any bookings under flight ID %d.",
+                           choice);
+                printf("\n");
                 break;
             case 5:
                 for (int i = 0; i < numberOfFlights; i++)
                     printf(
-                        "Flight availability: %s\nFlight name: %s\nTotal "
+                        "Flight ID: %d\nFlight availability: %s\nFlight name: "
+                        "%s\nTotal "
                         "Seats: "
                         "%d\nFree seats: %d\nSource: %s\nDestination: %s\n\n",
-                        (flights[i].available) ? "Yes" : "No", flights[i].name,
-                        flights[i].seats, flights[i].freeSeats,
+                        i, (flights[i].available) ? "Yes" : "No",
+                        flights[i].name, flights[i].seats, flights[i].freeSeats,
                         flights[i].source, flights[i].destination);
+                break;
+            case 6:
                 break;
             default:
                 printf("Invalid input.\n");
@@ -186,28 +200,31 @@ int main() {
             }
         } else if (choice == 2) {
             printf(
-                "Please select an operation: -\n\t1. Book a new flight\n\t2. "
-                "Cancel a booking (by booking ID).\n\t3. Modify passenger "
+                "\nPlease select an operation: -\n\t1. Book a new flight\n\t2. "
+                "Cancel a booking (by booking ID)\n\t3. Modify passenger "
                 "details on an "
-                "existing booking (by booking ID)\n: ");
+                "existing booking (by booking ID)\n\t4. List all "
+                "bookings\n\t5. Return to main "
+                "menu\n: ");
             scanf("%d", &choice);
             Flight buffer;
             int id;
             switch (choice) {
             case 1:
                 printf("Here's a list of all the flights currently available "
-                       "to book.");
+                       "to book.\n");
                 for (int i = 0; i < numberOfFlights; i++)
                     if (flights[i].available)
-                        printf("Flight name: %s\nTotal "
+                        printf("\n\tFlight ID: %d\n\tFlight name: %s\n\tTotal "
                                "Seats: "
-                               "%d\nFree seats: %d\nSource: %s\nDestination: "
-                               "%s\n\n",
-                               flights[i].name, flights[i].seats,
+                               "%d\n\tFree seats: %d\n\tSource: "
+                               "%s\n\tDestination: "
+                               "%s\n",
+                               i, flights[i].name, flights[i].seats,
                                flights[i].freeSeats, flights[i].source,
                                flights[i].destination);
-                printf(
-                    "Enter the flight ID for the flight you'd like to book: ");
+                printf("\nEnter the flight ID for the flight you'd like to "
+                       "book: ");
                 scanf("%d", &choice);
                 if (!flights[choice].available) {
                     printf("That flight's not available. Sorry.\n");
@@ -224,10 +241,11 @@ int main() {
                 printf("Enter your phone number (must strictly be a number): ");
                 scanf("%d", &buffer.phoneNumber);
                 appendBooking(&bookings, &numberOfBookings, buffer);
-                printf("Your booking ID is: %d\n", numberOfBookings);
+                flights[choice].freeSeats -= buffer.seats;
+                printf("Your booking ID is: %d\n\n", numberOfBookings - 1);
                 break;
             case 2:
-                printf("Enter the booking ID for the booking you'd like to "
+                printf("\nEnter the booking ID for the booking you'd like to "
                        "delete: ");
                 scanf("%d", &id);
                 if (id < 0) {
@@ -238,9 +256,9 @@ int main() {
                     printf("Could not find booking with booking ID %d.", id);
                     break;
                 }
-                printf("Passenger Name: %s\nFlight ID: %d\nNumber of Seats: "
+                printf("\nPassenger Name: %s\nFlight ID: %d\nNumber of Seats: "
                        "%d\nAge: %d\nPhone Number: %d\nSource: "
-                       "%s\nDestination: %s\n",
+                       "%s\nDestination: %s\n\n",
                        bookings[id].passengerName, bookings[id].flightId,
                        bookings[id].seats, bookings[id].age,
                        bookings[id].phoneNumber,
@@ -250,13 +268,15 @@ int main() {
                     "Are you sure you want to delete this booking? (0 or 1): ");
                 scanf("%d", &choice);
                 if (choice) {
+                    flights[bookings[id].flightId].freeSeats +=
+                        bookings[id].seats;
                     deleteBooking(&bookings, &numberOfBookings, id);
                     printf("Booking deleted.\n");
                 } else if (choice != 0)
                     printf("Invalid input.\n");
                 break;
             case 3:
-                printf("Enter booking ID: ");
+                printf("\nEnter booking ID: ");
                 scanf("%d", &id);
                 if (id < 0) {
                     printf("Invalid booking ID.\n");
@@ -266,9 +286,9 @@ int main() {
                     printf("Could not find booking with booking ID %d.", id);
                     break;
                 }
-                printf("Passenger Name: %s\nFlight ID: %d\nNumber of Seats: "
+                printf("\nPassenger Name: %s\nFlight ID: %d\nNumber of Seats: "
                        "%d\nAge: %d\nPhone Number: %d\nSource: "
-                       "%s\nDestination: %s\n",
+                       "%s\nDestination: %s\n\n",
                        bookings[id].passengerName, bookings[id].flightId,
                        bookings[id].seats, bookings[id].age,
                        bookings[id].phoneNumber,
@@ -279,7 +299,7 @@ int main() {
                        "(0 or 1): ");
                 scanf("%d", &choice);
                 if (!choice) {
-                    printf("Enter your name (50 characters or below): ");
+                    printf("\nEnter your name (50 characters or below): ");
                     scanf(" %[^\n]s", bookings[id].passengerName);
                     printf("Enter age: ");
                     scanf("%d", &bookings[id].age);
@@ -287,8 +307,8 @@ int main() {
                            "number): ");
                     scanf("%d", &bookings[id].phoneNumber);
                 } else if (choice == 1) {
-                    printf("Which passenger detail would you like to change?");
-                    printf("1. Passenger Name\n2. Age\n3. Phone Number\n: ");
+                    printf("\nWhich passenger detail would you like to change?"
+                           "\n1. Passenger Name\n2. Age\n3. Phone Number\n: ");
                     scanf("%d", &choice);
                     switch (choice) {
                     case 1:
@@ -312,19 +332,40 @@ int main() {
                 } else
                     printf("Invalid input.\n");
                 break;
+            case 4:
+                printf("\n");
+                for (int id = 0; id < numberOfBookings; id++)
+                    printf(
+                        "Passenger Name: %s\nFlight ID: %d\nNumber of Seats: "
+                        "%d\nAge: %d\nPhone Number: %d\nSource: "
+                        "%s\nDestination: %s\n",
+                        bookings[id].passengerName, bookings[id].flightId,
+                        bookings[id].seats, bookings[id].age,
+                        bookings[id].phoneNumber,
+                        flights[bookings[id].flightId].source,
+                        flights[bookings[id].flightId].destination);
+                printf("\n");
+                break;
+            case 5:
+                break;
             default:
                 printf("Invalid input.\n");
                 break;
             }
-        } else if (choice == 3)
-            break;
-        else if (choice == 4) {
-            printf("Saving...\n");
+        } else if (choice == 3) {
+            printf("\nSaving...\n");
+            writeBookings(BOOKINGS_LOCATION, bookings, numberOfBookings);
+            writeFlights(FLIGHTS_LOCATION, flights, numberOfFlights);
+            printf("Saved successfully.\n\n");
+        } else if (choice == 4) {
+            printf("\nSaving...\n");
             writeBookings(BOOKINGS_LOCATION, bookings, numberOfBookings);
             writeFlights(FLIGHTS_LOCATION, flights, numberOfFlights);
             printf("Saved successfully.\n");
             break;
-        } else
+        } else if (choice == 5)
+            break;
+        else
             printf("Invalid input. Please enter valid input.\n\n");
     }
     printf("Quitting...\n");
