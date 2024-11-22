@@ -2,10 +2,10 @@
 Flight Reservation System made in C that uses JSON to write and retrieve flight and booking records.
 
 ## Build
-`make build`
+`gcc main.c ./lib/structs.c ./lib/utils.c ./lib/cJSON.c -o main`
 
 ## Run
-`make run`
+`./main`
 
 ## Credits
 - David Gamble for cJSON, a JSON parser for C
