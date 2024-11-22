@@ -19,7 +19,7 @@ void input(char *buf, char *prompt, int num) {
 char *readFile(char *path) {
     FILE *fptr = fopen(path, "r");
     if (fptr == NULL) {
-        printf("Could not open file %s.", path);
+        printf("Could not open file %s. ", path);
         int choice;
         printf(
             "Attempt recovery by deleting and creating a new file? (1 or 0): ");
@@ -39,6 +39,8 @@ char *readFile(char *path) {
     fseek(fptr, 0L, SEEK_END);
     long int size = ftell(fptr);
     fseek(fptr, 0L, SEEK_SET);
+    if (size == 0)
+        return NULL;
     char *contents = malloc(size + 1);
     fread(contents, 1, size, fptr);
     fclose(fptr);
@@ -64,6 +66,6 @@ void writeFile(char *str, char *path) {
             exit(-1);
         }
     }
-    fwrite(str, 1, sizeof(str) - 1, fptr);
+    fwrite(str, 1, strlen(str), fptr);
     fclose(fptr);
 }

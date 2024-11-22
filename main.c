@@ -1,3 +1,4 @@
+// TODO: fix press enter to continue
 #include "lib/structs.h"
 #include "lib/utils.h"
 #include <stdio.h>
@@ -10,29 +11,27 @@ int main() {
     int numberOfFlights, numberOfBookings;
     Flight *flights = readFlights(FLIGHTS_LOCATION, &numberOfFlights);
     Booking *bookings = readBookings(BOOKINGS_LOCATION, &numberOfBookings);
-    system("clear");
-    printf("Welcome to the Flight Reservation System (FRS).\n");
+    printf("\nWelcome to the Flight Reservation System (FRS).\n");
     int choice;
     while (1) {
-        system("clear");
-        printf("Please select your mode: -\n1. Flight Management\n2. Booking "
-               "Management\n3. Quit\n4. Save and Quit\n: ");
+        printf(
+            "Please select your mode: -\n\t1. Flight Management\n\t2. Booking "
+            "Management\n\t3. Quit\n\t4. Save and Quit\n\t: ");
         scanf("%d", &choice);
         int id;
         if (choice == 1) {
-            system("clear");
             printf(
-                "Please select an operation: -\n1. Create a new flight "
-                "entry\n2. "
-                "Delete an existing flight entry (by flight ID).\n3. Modify an "
-                "existing flight entry (by flight ID)\n4. List all bookings "
-                "under a flight (by flight ID)\n5. List all flight "
+                "Please select an operation: -\n\t1. Create a new flight "
+                "entry\n\t2. "
+                "Delete an existing flight entry (by flight ID).\n\t3. Modify "
+                "an "
+                "existing flight entry (by flight ID)\n\t4. List all bookings "
+                "under a flight (by flight ID)\n\t5. List all flight "
                 "entries\n: ");
             scanf("%d", &choice);
             Flight buffer;
             switch (choice) {
             case 1:
-                system("clear");
                 printf(
                     "Enter your flight's availability for booking (0 or 1): ");
                 scanf("%d", &buffer.available);
@@ -46,11 +45,9 @@ int main() {
                 printf("Enter flight destination (3 characters): ");
                 scanf(" %[^\n]s", buffer.destination);
                 appendFlight(flights, &numberOfFlights, buffer);
-                system("clear");
                 printf("Your flight ID is: %d\n", numberOfFlights);
                 break;
             case 2:
-                system("clear");
                 printf("Enter flight ID: ");
                 scanf("%d", &id);
                 if (id < 0) {
@@ -59,8 +56,6 @@ int main() {
                 }
                 if (id >= numberOfFlights) {
                     printf("Could not find flight with flight ID %d.", id);
-                    printf("Press enter to continue...");
-                    getchar();
                     break;
                 }
                 printf("Flight availability: %s\nFlight name: %s\nTotal Seats: "
@@ -85,19 +80,14 @@ int main() {
                     printf("Invalid input.\n");
                 break;
             case 3:
-                system("clear");
                 printf("Enter flight ID: ");
                 scanf("%d", &id);
                 if (id < 0) {
                     printf("Invalid flight ID.\n");
-                    printf("Press enter to continue...");
-                    getchar();
                     break;
                 }
                 if (id >= numberOfFlights) {
                     printf("Could not find flight with flight ID %d.", id);
-                    printf("Press enter to continue...");
-                    getchar();
                     break;
                 }
                 printf("Flight availability: %s\nFlight name: %s\nTotal Seats: "
@@ -109,7 +99,6 @@ int main() {
                        "fields? "
                        "(0 or 1): ");
                 scanf("%d", &choice);
-                system("clear");
                 if (!choice) {
                     printf("Enter your flight's availability for booking (0 or "
                            "1): ");
@@ -195,20 +184,17 @@ int main() {
                 printf("Invalid input.\n");
                 break;
             }
-            printf("Press enter to continue...");
-            getchar();
         } else if (choice == 2) {
-            system("clear");
-            printf("Please select an operation: -\n1. Book a new flight\n2. "
-                   "Cancel a booking (by booking ID).\n3. Modify passenger "
-                   "details on an "
-                   "existing booking (by booking ID)\n: ");
+            printf(
+                "Please select an operation: -\n\t1. Book a new flight\n\t2. "
+                "Cancel a booking (by booking ID).\n\t3. Modify passenger "
+                "details on an "
+                "existing booking (by booking ID)\n: ");
             scanf("%d", &choice);
             Flight buffer;
             int id;
             switch (choice) {
             case 1:
-                system("clear");
                 printf("Here's a list of all the flights currently available "
                        "to book.");
                 for (int i = 0; i < numberOfFlights; i++)
@@ -239,11 +225,8 @@ int main() {
                 scanf("%d", &buffer.phoneNumber);
                 appendBooking(bookings, &numberOfBookings, buffer);
                 printf("Your booking ID is: %d\n", numberOfBookings);
-                printf("Press enter to continue...");
-                getchar();
                 break;
             case 2:
-                system("clear");
                 printf("Enter the booking ID for the booking you'd like to "
                        "delete: ");
                 scanf("%d", &id);
@@ -253,8 +236,6 @@ int main() {
                 }
                 if (id >= numberOfBookings) {
                     printf("Could not find booking with booking ID %d.", id);
-                    printf("Press enter to continue...");
-                    getchar();
                     break;
                 }
                 printf("Passenger Name: %s\nFlight ID: %d\nNumber of Seats: "
@@ -275,7 +256,6 @@ int main() {
                     printf("Invalid input.\n");
                 break;
             case 3:
-                system("clear");
                 printf("Enter booking ID: ");
                 scanf("%d", &id);
                 if (id < 0) {
@@ -284,8 +264,6 @@ int main() {
                 }
                 if (id >= numberOfBookings) {
                     printf("Could not find booking with booking ID %d.", id);
-                    printf("Press enter to continue...");
-                    getchar();
                     break;
                 }
                 printf("Passenger Name: %s\nFlight ID: %d\nNumber of Seats: "
@@ -300,7 +278,6 @@ int main() {
                        "fields? "
                        "(0 or 1): ");
                 scanf("%d", &choice);
-                system("clear");
                 if (!choice) {
                     printf("Enter your name (50 characters or below): ");
                     scanf(" %[^\n]s", bookings[id].passengerName);
@@ -339,21 +316,19 @@ int main() {
                 printf("Invalid input.\n");
                 break;
             }
-            printf("Press enter to continue...");
-            getchar();
-        } else if (choice == 3) {
-            printf("Saving...");
+        } else if (choice == 3)
+            break;
+        else if (choice == 4) {
+            printf("Saving...\n");
             writeBookings(BOOKINGS_LOCATION, bookings, numberOfBookings);
             writeFlights(FLIGHTS_LOCATION, flights, numberOfFlights);
-            printf("Saved successfully.");
+            printf("Saved successfully.\n");
             break;
-        } else if (choice == 4)
-            break;
-        else {
+        } else
             printf("Invalid input. Please enter valid input.\n\n");
-            break;
-        }
     }
     printf("Quitting...");
+    free(flights);
+    free(bookings);
     return 0;
 }
