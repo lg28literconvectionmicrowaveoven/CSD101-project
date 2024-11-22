@@ -1,21 +1,6 @@
 #include <unistd.h>
 #include <utils.h>
 
-int exists(char *path) {
-    if (access(path, R_OK | W_OK) == 0)
-        return 1;
-    else
-        return 0;
-}
-
-void input(char *buf, char *prompt, int num) {
-    if (!strchr(buf, '\n'))
-        while (getchar() != '\n')
-            ;
-    printf("%s", prompt);
-    fgets(buf, num + 1, stdin);
-}
-
 char *readFile(char *path) {
     FILE *fptr = fopen(path, "r");
     if (fptr == NULL) {
