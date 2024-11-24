@@ -1,5 +1,6 @@
-# Flight Reservation System (FRS)
+# Flight Reservation System (FRS) by Sabarigirish Manikandan (2410110283), and Ishaan Prakash (2410110429)
 Flight Reservation System made in C that uses JSON to write and retrieve flight and booking records.
+
 ## Problem Statement
 A Flight Reservation System (HMS) is a real-time problem of a person relatable getting the
 tension to book the flight tickets at the cheapest price to book tickets for their journey.
