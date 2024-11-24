@@ -268,8 +268,20 @@ int main() {
                 buffer.flightId = choice;
                 printf("Enter your name (50 characters or below): ");
                 scanf(" %[^\n]s", buffer.passengerName);
-                printf("Enter the number of seats you'd like to book: ");
-                scanf("%d", &buffer.seats);
+                while (1) {
+                    printf("Enter the number of seats you'd like to book: ");
+                    scanf("%d", &buffer.seats);
+                    if (buffer.seats > flights[choice].freeSeats) {
+                        printf("There are only %d seats available. Would you "
+                               "like to book a lesser number of seats or "
+                               "cancel the booking process? (0 or 1)",
+                               flights[choice].freeSeats);
+                        scanf("%d", &choice);
+                        if (choice)
+                            goto end;
+                    } else
+                        break;
+                }
                 printf("Enter your age: ");
                 scanf("%d", &buffer.age);
                 printf("Enter your phone number (must strictly be a number): ");
@@ -278,7 +290,10 @@ int main() {
                 // Create booking and update flight seats
                 appendBooking(&bookings, &numberOfBookings, buffer);
                 flights[choice].freeSeats -= buffer.seats;
+                if (buffer.seats == flights[choice].freeSeats)
+                    flights[choice].available = 0;
                 printf("Your booking ID is: %d\n\n", numberOfBookings - 1);
+            end:
                 break;
             case 2: // Cancel booking
                 // Get and validate booking ID
