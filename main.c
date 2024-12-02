@@ -8,7 +8,6 @@
  *****************************************************************************/
 
 #include "lib/structs.h"
-#include "lib/utils.h"
 #include <stdio.h>
 #include <stdlib.h>
 
